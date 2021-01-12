@@ -74,12 +74,11 @@ void ShoppingCart::handleOffers(Receipt& receipt, std::map<Product, Offer> offer
         double quantity = productQuantity.second;
         if (offers.find(product) != offers.end()) {
             auto offer = offers[product];
-            double unitPrice = catalog->getUnitPrice(product);
 
-            checkThreeForTwoDiscount(receipt, offer, product, unitPrice, quantity);
-            checkTwoForAmountDiscount(receipt, offer, product, unitPrice, quantity);
-            checkFiveForAmountDiscount(receipt, offer, product, unitPrice, quantity);
-            checkTenPercentDiscount(receipt, offer, product, unitPrice, quantity);
+            checkThreeForTwoDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
+            checkTwoForAmountDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
+            checkFiveForAmountDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
+            checkTenPercentDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
         }
     }
 }
