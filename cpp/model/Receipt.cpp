@@ -17,12 +17,11 @@ std::vector<Discount> Receipt::getDiscounts() const {
 }
 
 double Receipt::getTotalPrice() const {
-    double total = 0.0;
-    for (const auto& item : items) {
-        total += item.getTotalPrice();
-    }
-    for (const auto& discount : discounts) {
-        total += discount.getDiscountAmount();
-    }
+    double total = std::accumulate(begin(items), end(items), 0.0,
+            [](double price, const auto &item) { return price + item.getTotalPrice(); });
+
+    total = std::accumulate(begin(discounts), end(discounts), total,
+            [](double val, const auto &discount) { return val + discount.getDiscountAmount(); });
+
     return total;
 }
