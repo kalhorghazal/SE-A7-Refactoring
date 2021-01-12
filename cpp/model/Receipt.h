@@ -3,6 +3,7 @@
 
 
 #include <vector>
+#include <numeric>
 #include "Discount.h"
 #include "ReceiptItem.h"
 
