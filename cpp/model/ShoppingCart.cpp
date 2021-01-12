@@ -23,7 +23,9 @@ void ShoppingCart::addItemQuantity(const Product& product, double quantity) {
     }
 }
 
-void ShoppingCart::checkThreeForTwoDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity) {
+void ShoppingCart::checkThreeForTwoDiscount(Receipt& receipt, Offer& offer, Product& product, 
+        double unitPrice, double quantity) {
+
     int quantityAsInt = (int) quantity;
     int numberOfXs = quantityAsInt / 3;
     if (offer.getOfferType() == SpecialOfferType::ThreeForTwo && quantityAsInt >= 3) {
@@ -34,7 +36,9 @@ void ShoppingCart::checkThreeForTwoDiscount(Receipt& receipt, Offer& offer, Prod
     }
 }
 
-void ShoppingCart::checkAmountDiscount(Receipt& receipt, Product& product, double amount, double unitPrice, double quantity, int count) {
+void ShoppingCart::checkAmountDiscount(Receipt& receipt, Product& product, double amount, 
+        double unitPrice, double quantity, int count) {
+
     int quantityAsInt = (int) quantity;
     int numberOfXs = quantityAsInt / count;
     if (quantityAsInt >= count) {
@@ -46,20 +50,26 @@ void ShoppingCart::checkAmountDiscount(Receipt& receipt, Product& product, doubl
     }
 }
 
-void ShoppingCart::checkTwoForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity) {
+void ShoppingCart::checkTwoForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, 
+        double unitPrice, double quantity) {
+
     int quantityAsInt = (int) quantity;
     if (offer.getOfferType() == SpecialOfferType::TwoForAmount) {
         checkAmountDiscount(receipt, product, offer.getArgument(), unitPrice, quantity, 2);
     }
 }
 
-void ShoppingCart::checkFiveForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity) {
+void ShoppingCart::checkFiveForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, 
+        double unitPrice, double quantity) {
+
     if (offer.getOfferType() == SpecialOfferType::FiveForAmount) {
         checkAmountDiscount(receipt, product, offer.getArgument(), unitPrice, quantity, 5);
     }
 }
 
-void ShoppingCart::checkTenPercentDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity) {
+void ShoppingCart::checkTenPercentDiscount(Receipt& receipt, Offer& offer, Product& product, 
+        double unitPrice, double quantity) {
+
     if (offer.getOfferType() == SpecialOfferType::TenPercentDiscount) {
         double discountAmount = quantity * unitPrice * offer.getArgument() / 100.0;
         std::string description = std::to_string(offer.getArgument()) + "% off";
@@ -68,13 +78,14 @@ void ShoppingCart::checkTenPercentDiscount(Receipt& receipt, Offer& offer, Produ
     }
 }
 
-void ShoppingCart::handleOffers(Receipt& receipt, std::map<Product, Offer> offers, SupermarketCatalog* catalog) {
+void ShoppingCart::handleOffers(Receipt& receipt, std::map<Product, Offer> offers, 
+        SupermarketCatalog* catalog) {
+
     for (const auto& productQuantity : productQuantities) {
         Product product = productQuantity.first;
         double quantity = productQuantity.second;
         if (offers.find(product) != offers.end()) {
-            auto offer = offers[product];
-            
+            auto offer = offers[product];           
             checkThreeForTwoDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
             checkTwoForAmountDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
             checkFiveForAmountDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
