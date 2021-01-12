@@ -46,7 +46,7 @@ public:
     std::string presentReceiptItem(const ReceiptItem &item) const
     {
         std::string price = getFormattedNumberAsString(item.getTotalPrice(), 2);
-        std::string name = item.getProduct().getName();
+        std::string name = item.getProductName();
 
         std::string line = formatLineWithWhitespace(name, price);
 
@@ -59,7 +59,7 @@ public:
 
     std::string presentDiscount(const Discount &discount) const
     {
-        std::string name = discount.getDescription() + "(" + discount.getProduct().getName() + ")";
+        std::string name = discount.getDescription() + "(" + discount.getProductName() + ")";
         std::string pricePresentation = getFormattedNumberAsString(discount.getDiscountAmount(), 2);
         return formatLineWithWhitespace(name, pricePresentation);
     }
@@ -80,11 +80,14 @@ public:
     std::string presentPrice(double price) const
     { return getFormattedNumberAsString(price, 2); }
 
+
     static std::string presentQuantity(const ReceiptItem &item)
     {
-        return ProductUnit::Each == item.getProduct().getUnit()
-               ? getFormattedNumberAsString(item.getQuantity(), 0)
-               : getFormattedNumberAsString(item.getQuantity(), 3);
+        if (item.hasEachProductUnit()) {
+            return getFormattedNumberAsString(item.getQuantity(), 0);
+        }
+
+        return getFormattedNumberAsString(item.getQuantity(), 3);
     }
 
 private:
