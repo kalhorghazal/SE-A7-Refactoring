@@ -21,17 +21,23 @@ public:
 
     void addItemQuantity(const Product& product, double quantity);
 
-    void handleOffers(Receipt& receipt, std::map<Product, Offer> offers, SupermarketCatalog* catalog);
+    void handleOffers(Receipt& receipt, std::map<Product, Offer> offers, 
+        SupermarketCatalog* catalog);
 
-    void checkThreeForTwoDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity);
+    void checkThreeForTwoDiscount(Receipt& receipt, Offer& offer, Product& product, 
+            double unitPrice, double quantity);
 
-    void checkTwoForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity);
+    void checkTwoForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, 
+            double unitPrice, double quantity);
 
-    void checkFiveForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity);
+    void checkFiveForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, 
+            double unitPrice, double quantity);
 
-    void checkTenPercentDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity);
+    void checkTenPercentDiscount(Receipt& receipt, Offer& offer, Product& product, 
+            double unitPrice, double quantity);
 
-    void checkAmountDiscount(Receipt& receipt, Product& product, double amount, double unitPrice, double quantity, int count);
+    void checkAmountDiscount(Receipt& receipt, Product& product, double amount, 
+            double unitPrice, double quantity, int count);
 
 private:
     std::vector<ProductQuantity> items;
