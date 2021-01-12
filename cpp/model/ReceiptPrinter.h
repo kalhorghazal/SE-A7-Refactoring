@@ -7,6 +7,15 @@
 #include <iomanip>
 #include <sstream>
 
+std::string operator*(std::string const &s, std::size_t n)
+{
+  std::string r;
+  r.reserve(n * s.size());
+  for (std::size_t i = 0; i < n; ++i)
+    r += s;
+  return r;
+}
+
 class ReceiptPrinter
 {
 
@@ -65,14 +74,9 @@ public:
     std::string formatLineWithWhitespace(const std::string &name, const std::string &value) const
     {
         int whitespaceSize = columns - name.length() - value.length();
-        std::string whitespace;
-        for (int i = 0; i < whitespaceSize; i++)
-        {
-            whitespace.append(" ");
-        }
-        return name + whitespace + value + "\n";
+        std::string formatted = name + (std::string(" ") * whitespaceSize) + value + "\n";
+        return formatted;
     }
-
     std::string presentPrice(double price) const
     { return getFormattedNumberAsString(price, 2); }
 
