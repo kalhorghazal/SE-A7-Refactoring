@@ -7,6 +7,10 @@
 #include <iomanip>
 #include <sstream>
 
+#define COLUMN_NUM 40
+#define NEW_LINE "\n"
+#define SPACE " "
+
 std::string operator*(std::string const &s, std::size_t n)
 {
   std::string r;
@@ -20,7 +24,7 @@ class ReceiptPrinter
 {
 
 public:
-    ReceiptPrinter() : ReceiptPrinter(40)
+    ReceiptPrinter() : ReceiptPrinter(COLUMN_NUM)
     {
     }
 
@@ -38,7 +42,7 @@ public:
         {
             result.append(presentDiscount(discount));
         }
-        result.append("\n");
+        result.append(NEW_LINE);
         result.append(presentTotal(receipt));
         return result;
     }
@@ -52,7 +56,7 @@ public:
 
         if (item.getQuantity() != 1)
         {
-            line += "  " + getFormattedNumberAsString(item.getPrice(), 2) + " * " + presentQuantity(item) + "\n";
+            line += (std::string(SPACE) * 2) + getFormattedNumberAsString(item.getPrice(), 2) + " * " + presentQuantity(item) + NEW_LINE;
         }
         return line;
     }
@@ -74,7 +78,7 @@ public:
     std::string formatLineWithWhitespace(const std::string &name, const std::string &value) const
     {
         int whitespaceSize = columns - name.length() - value.length();
-        std::string formatted = name + (std::string(" ") * whitespaceSize) + value + "\n";
+        std::string formatted = name + (std::string(SPACE) * whitespaceSize) + value + NEW_LINE;
         return formatted;
     }
     std::string presentPrice(double price) const
