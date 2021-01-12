@@ -9,6 +9,8 @@
 #include "Receipt.h"
 #include "SupermarketCatalog.h"
 
+#define DEFAULT_QUANTITY 1.0
+
 class ShoppingCart {
 public:
     std::vector<ProductQuantity> getItems() const;
