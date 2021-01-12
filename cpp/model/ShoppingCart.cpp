@@ -11,7 +11,7 @@ std::map<Product, double> ShoppingCart::getProductQuantities() const {
 }
 
 void ShoppingCart::addItem(const Product& product) {
-    addItemQuantity(product, 1.0);
+    addItemQuantity(product, DEFAULT_QUANTITY);
 }
 
 void ShoppingCart::addItemQuantity(const Product& product, double quantity) {
@@ -74,7 +74,7 @@ void ShoppingCart::handleOffers(Receipt& receipt, std::map<Product, Offer> offer
         double quantity = productQuantity.second;
         if (offers.find(product) != offers.end()) {
             auto offer = offers[product];
-
+            
             checkThreeForTwoDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
             checkTwoForAmountDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
             checkFiveForAmountDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
