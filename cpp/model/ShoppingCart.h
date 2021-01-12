@@ -21,6 +21,14 @@ public:
 
     void handleOffers(Receipt& receipt, std::map<Product, Offer> offers, SupermarketCatalog* catalog);
 
+    void checkThreeForTwoDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity);
+
+    void checkTwoForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity);
+
+    void checkFiveForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity);
+
+    void checkTenPercentDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity);
+
 private:
     std::vector<ProductQuantity> items;
     std::map<Product, double> productQuantities;
