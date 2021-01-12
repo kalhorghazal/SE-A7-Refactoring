@@ -23,6 +23,49 @@ void ShoppingCart::addItemQuantity(const Product& product, double quantity) {
     }
 }
 
+void ShoppingCart::checkThreeForTwoDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity) {
+    int quantityAsInt = (int) quantity;
+    int numberOfXs = quantityAsInt / 3;
+    if (offer.getOfferType() == SpecialOfferType::ThreeForTwo && quantityAsInt > 2) {
+        double total = (numberOfXs * 2 * unitPrice) + quantityAsInt % 3 * unitPrice;
+        double discountAmount = unitPrice * quantity - total;
+        Discount* discount = new Discount("3 for 2", -discountAmount, product);
+        receipt.addDiscount(*discount);
+    }
+}
+
+void ShoppingCart::checkTwoForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity) {
+    int quantityAsInt = (int) quantity;
+    if (offer.getOfferType() == SpecialOfferType::TwoForAmount && quantityAsInt >= 2) {
+        double total = offer.getArgument() * (quantityAsInt / 2) + quantityAsInt % 2 * unitPrice;
+        double discountAmount = unitPrice * quantity - total;
+        std::string description = "2 for " + std::to_string(offer.getArgument());
+        Discount* discount = new Discount(description, -discountAmount, product);
+        receipt.addDiscount(*discount);
+    }
+}
+
+void ShoppingCart::checkFiveForAmountDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity) {
+    int quantityAsInt = (int) quantity;
+    int numberOfXs = quantityAsInt / 5;
+    if (offer.getOfferType() == SpecialOfferType::FiveForAmount && quantityAsInt >= 5) {
+        double total = offer.getArgument() * numberOfXs + quantityAsInt % 5 * unitPrice;
+        double discountAmount = unitPrice * quantity - total;
+        std::string description = "5 for " + std::to_string(offer.getArgument());
+        Discount* discount = new Discount(description, -discountAmount, product);
+        receipt.addDiscount(*discount);
+    }
+}
+
+void ShoppingCart::checkTenPercentDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity) {
+    if (offer.getOfferType() == SpecialOfferType::TenPercentDiscount) {
+        double discountAmount = quantity * unitPrice * offer.getArgument() / 100.0;
+        std::string description = std::to_string(offer.getArgument()) + "% off";
+        Discount* discount = new Discount(description, -discountAmount, product);
+        receipt.addDiscount(*discount);
+    }
+}
+
 void ShoppingCart::handleOffers(Receipt& receipt, std::map<Product, Offer> offers, SupermarketCatalog* catalog) {
     for (const auto& productQuantity : productQuantities) {
         Product product = productQuantity.first;
@@ -30,36 +73,11 @@ void ShoppingCart::handleOffers(Receipt& receipt, std::map<Product, Offer> offer
         if (offers.find(product) != offers.end()) {
             auto offer = offers[product];
             double unitPrice = catalog->getUnitPrice(product);
-            int quantityAsInt = (int) quantity;
-            Discount* discount = nullptr;
-            int x = 1;
 
-            if (offer.getOfferType() == SpecialOfferType::ThreeForTwo) {
-                x = 3;
-            } else if (offer.getOfferType() == SpecialOfferType::TwoForAmount) {
-                x = 2;
-                if (quantityAsInt >= 2) {
-                    double total = offer.getArgument() * (quantityAsInt / x) + quantityAsInt % 2 * unitPrice;
-                    double discountN = unitPrice * quantity - total;
-                    discount = new Discount("2 for " + std::to_string(offer.getArgument()), -discountN, product);
-                }
-            } if (offer.getOfferType() == SpecialOfferType::FiveForAmount) {
-                x = 5;
-            }
-            int numberOfXs = quantityAsInt / x;
-            if (offer.getOfferType() == SpecialOfferType::ThreeForTwo && quantityAsInt > 2) {
-                double discountAmount = quantity * unitPrice - ((numberOfXs * 2 * unitPrice) + quantityAsInt % 3 * unitPrice);
-                discount = new Discount("3 for 2", -discountAmount, product);
-            }
-            if (offer.getOfferType() == SpecialOfferType::TenPercentDiscount) {
-                discount = new Discount(std::to_string(offer.getArgument()) + "% off", -quantity * unitPrice * offer.getArgument() / 100.0, product);
-            }
-            if (offer.getOfferType() == SpecialOfferType::FiveForAmount && quantityAsInt >= 5) {
-                double discountTotal = unitPrice * quantity - (offer.getArgument() * numberOfXs + quantityAsInt % 5 * unitPrice);
-                discount = new Discount(std::to_string(x) + " for " + std::to_string(offer.getArgument()), -discountTotal, product);
-            }
-            if (discount != nullptr)
-                receipt.addDiscount(*discount);
+            checkThreeForTwoDiscount(receipt, offer, product, unitPrice, quantity);
+            checkTwoForAmountDiscount(receipt, offer, product, unitPrice, quantity);
+            checkFiveForAmountDiscount(receipt, offer, product, unitPrice, quantity);
+            checkTenPercentDiscount(receipt, offer, product, unitPrice, quantity);
         }
     }
 }
