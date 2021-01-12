@@ -19,6 +19,10 @@ public:
 
     bool operator!=(const ReceiptItem& rhs) const;
 
+    bool hasEachProductUnit() const;
+
+    std::string getProductName() const;
+
 private:
     Product product;
     double price;
