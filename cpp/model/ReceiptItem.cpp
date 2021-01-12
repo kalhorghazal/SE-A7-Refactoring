@@ -29,3 +29,11 @@ bool ReceiptItem::operator==(const ReceiptItem& rhs) const {
 bool ReceiptItem::operator!=(const ReceiptItem& rhs) const {
     return !(rhs == *this);
 }
+
+bool ReceiptItem::hasEachProductUnit() const {
+  return ProductUnit::Each == product.getUnit();
+}
+
+std::string ReceiptItem::getProductName() const {
+    return product.getName();
+}
