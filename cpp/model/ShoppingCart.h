@@ -29,6 +29,8 @@ public:
 
     void checkTenPercentDiscount(Receipt& receipt, Offer& offer, Product& product, double unitPrice, double quantity);
 
+    void checkAmountDiscount(Receipt& receipt, Product& product, double amount, double unitPrice, double quantity, int count);
+
 private:
     std::vector<ProductQuantity> items;
     std::map<Product, double> productQuantities;
