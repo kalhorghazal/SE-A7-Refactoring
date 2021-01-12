@@ -15,6 +15,8 @@ public:
 
     Product getProduct() const;
 
+    std::string getProductName() const;
+
 private:
     std::string description;
     double discountAmount;
