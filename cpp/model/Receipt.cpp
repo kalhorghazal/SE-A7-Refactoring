@@ -4,8 +4,9 @@ std::vector<ReceiptItem> Receipt::getItems() const {
     return items;
 }
 
-void Receipt::addDiscount(const Discount& discount) {
-    discounts.push_back(discount);
+void Receipt::addDiscount(const Product& product, std::string description, double discountAmount) {
+    Discount* discount = new Discount(description, discountAmount, product);
+    discounts.push_back(*discount);
 }
 
 void Receipt::addProduct(const Product& product, double quantity, double price, double totalPrice) {
