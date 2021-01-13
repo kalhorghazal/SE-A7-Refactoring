@@ -14,6 +14,8 @@ TEST_CASE("Discounts", "[Supermarket]")
     SupermarketCatalog *catalog = new FakeCatalog();
     Product toothbrush("toothbrush", ProductUnit::Each);
     catalog->addProduct(toothbrush, 0.99);
+	Product toothpaste("toothpaste", ProductUnit::Each);
+    catalog->addProduct(toothpaste, 1.49);
     Product rice("rice", ProductUnit::Each);
     catalog->addProduct(rice, 2.99);
     Product apples("apples", ProductUnit::Kilo);
@@ -139,4 +141,20 @@ TEST_CASE("Discounts", "[Supermarket]")
         Receipt receipt = teller.checksOutArticlesFrom(cart);
         ApprovalTests::Approvals::verify(printer.printReceipt(receipt));
     }
+	
+	SECTION("Bundle discount")
+    {
+        cart.addItem(toothbrush);
+        cart.addItem(toothpaste);
+        std::vector <std::vector <std::string> > bundles;
+        std::vector <std::string> new_bundle;
+        new_bundle.push_back("toothpaste");
+        new_bundle.push_back("toothbrush");
+        bundles.push_back(new_bundle);
+        cart.applyBundles(bundles);
+        teller.addSpecialOffer(SpecialOfferType::Bundle, toothbrush, 10.0);
+        teller.addSpecialOffer(SpecialOfferType::Bundle, toothpaste, 10.0);
+		Receipt receipt = teller.checksOutArticlesFrom(cart);
+        ApprovalTests::Approvals::verify(printer.printReceipt(receipt));
+	}
 }
