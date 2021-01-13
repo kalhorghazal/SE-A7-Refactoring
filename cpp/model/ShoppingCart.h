@@ -39,6 +39,9 @@ public:
     void checkAmountDiscount(Receipt& receipt, Product& product, double amount, 
             double unitPrice, double quantity, int count);
 
+    double computeAmountDiscount(double amount, double quantity, double unitPrice, 
+            int count);
+
 private:
     std::vector<ProductQuantity> items;
     std::map<Product, double> productQuantities;
