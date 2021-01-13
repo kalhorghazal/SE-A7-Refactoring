@@ -23,6 +23,10 @@ void ShoppingCart::addItemQuantity(const Product& product, double quantity) {
     }
 }
 
+void ShoppingCart::applyBundles(std::vector <std::vector <std::string> > bundles_list) {
+    bundles = bundles_list;
+}
+
 double ShoppingCart::computeAmountDiscount(double amount, double quantity, double unitPrice, 
         int count) {
 
@@ -79,6 +83,40 @@ void ShoppingCart::checkTenPercentDiscount(Receipt& receipt, Offer& offer, Produ
     }
 }
 
+void ShoppingCart::checkBundleDiscount(Receipt& receipt, Offer& offer, Product& product, 
+        double unitPrice, double quantity) {
+	double productQuantity = quantity;
+    if (offer.getOfferType() == SpecialOfferType::Bundle) {
+		for(int i=0;i<bundles.size();i++){
+            std::vector <std::string>::iterator it;
+			int bundleIndex = -1;
+            for(int k=0;k<bundles[i].size();k++)
+				if(bundles[i][k] == product.getName()){
+					bundleIndex = k;
+				}
+
+			if((bundleIndex != -1) && (productQuantity>0)){
+				double bundlesQuantity = productQuantity;
+                bool unmatchedBundle = false;
+                for(int j=0;j<bundles[i].size();j++){
+                    double itemQuantity = receipt.getItemQuantity(bundles[i][j]);
+					if(itemQuantity == -1) {
+                        unmatchedBundle = true;
+                        break;
+                    }    
+                    bundlesQuantity = std::min(bundlesQuantity, itemQuantity);
+                }
+                if(unmatchedBundle == false)
+                    productQuantity -= bundlesQuantity;
+            }   
+        }
+        double discountAmount = (quantity - productQuantity) * unitPrice * offer.getArgument() / 100.0;
+		
+		std::string description = std::to_string(offer.getArgument()) + "% off";
+		receipt.addDiscount(product, description, -discountAmount);
+	}
+}
+
 void ShoppingCart::handleOffers(Receipt& receipt, std::map<Product, Offer> offers, 
         SupermarketCatalog* catalog) {
 
@@ -91,6 +129,7 @@ void ShoppingCart::handleOffers(Receipt& receipt, std::map<Product, Offer> offer
             checkTwoForAmountDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
             checkFiveForAmountDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
             checkTenPercentDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
+			checkBundleDiscount(receipt, offer, product, catalog->getUnitPrice(product), quantity);
         }
     }
 }
