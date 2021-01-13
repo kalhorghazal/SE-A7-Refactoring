@@ -15,7 +15,7 @@ public:
 
     double getTotalPrice() const;
 
-    void addDiscount(const Discount& discount);
+    void addDiscount(const Product& product, std::string description, double discountAmount);
 
     void addProduct(const Product& product, double quantity, double price, double totalPrice);
 
