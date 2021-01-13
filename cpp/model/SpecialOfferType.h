@@ -7,6 +7,7 @@ enum class SpecialOfferType {
     TenPercentDiscount,
     TwoForAmount,
     FiveForAmount,
+	Bundle,
 };
 
 
