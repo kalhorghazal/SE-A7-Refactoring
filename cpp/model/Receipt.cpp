@@ -26,3 +26,11 @@ double Receipt::getTotalPrice() const {
 
     return total;
 }
+
+double Receipt::getItemQuantity(std::string itemName){
+    for(int i=0;i<items.size();i++){
+        if(items[i].getProductName() == itemName)
+            return items[i].getQuantity();
+    }
+    return -1;
+}
