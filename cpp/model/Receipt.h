@@ -19,6 +19,7 @@ public:
 
     void addProduct(const Product& product, double quantity, double price, double totalPrice);
 
+	double getItemQuantity(std::string itemName);
 private:
     std::vector<ReceiptItem> items;
     std::vector<Discount> discounts;
