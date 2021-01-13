@@ -4,6 +4,8 @@
 
 #include <vector>
 #include <map>
+#include <algorithm>
+#include <iostream>
 #include "ProductQuantity.h"
 #include "Offer.h"
 #include "Receipt.h"
@@ -41,10 +43,19 @@ public:
 
     double computeAmountDiscount(double amount, double quantity, double unitPrice, 
             int count);
+			
+	void checkBundleDiscount(Receipt& receipt, Offer& offer, Product& product, 
+			double unitPrice, double quantity);
+			
+	void applyBundles(std::vector <std::vector <std::string> > bundles_list);
+
+
 
 private:
     std::vector<ProductQuantity> items;
     std::map<Product, double> productQuantities;
+	std::vector <std::vector <std::string> > bundles;
+
 };
 
 
