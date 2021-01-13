@@ -1,7 +1,0 @@
-toothbrush                          0.99
-toothpaste                          1.49
-10.000000% off(toothbrush)         -0.10
-10.000000% off(toothpaste)         -0.15
-
-Total:                              2.23
-
